@@ -1,0 +1,37 @@
+pipeline
+{
+    agent any 
+    stages
+    {
+        stage('conti down')
+        {
+            steps
+            {
+                git "https://github.com/sudarshansw7/train-ticket-reservation.git"
+            }
+        }
+        stage('build')
+        {
+            steps
+            {
+                sh 'mvn clean package'
+            }
+        }
+        stage('sonar code quality scanning')
+        {
+            steps
+            {
+                script
+                {
+                    //def scannerHome = tool 'SonarQubeScanner'
+                    //withSonarQubeEnv('sonar') {
+                    //sh "${scannerHome}/bin/sonar-scanner"
+                    withSonarQubeEnv(credentialsId: 'sonar2') {
+                        sh "mvn sonar:sonar"
+                }
+            }
+        }
+    }
+}
+}
+
